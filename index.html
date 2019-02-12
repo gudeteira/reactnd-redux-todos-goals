@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js"></script>
     <title>To-Do Goals Project</title>
 </head>
 <body>
@@ -20,41 +21,11 @@
 </div>
 
 <script>
-  // Library Code
-  function createStore(reducer) {
-    /*
-   The store has the following information:
-   - the state tree
-   - a way to get the state tree
-   - a way to listen and respond to the state changing
-   - a way to update the state
-   */
-
-    let state
-    let listeners = []
-
-    const getState = () => state
-
-    const subscribe = (listener) => {
-      listeners.push(listener)
-      return () => {
-        listeners = listeners.filter(l => l !== listener)
-      }
-    }
-
-    const dispatch = (action) => {
-      state = reducer(state, action)
-      listeners.forEach(listener => listener())
-    }
-
-    return {
-      getState,
-      subscribe,
-      dispatch
-    }
-  }
-
-
+  //  The store has the following information:
+  //  - the state tree
+  //  - a way to get the state tree
+  //  - a way to listen and respond to the state changing
+  //  - a way to update the state
   // App code
   const ADD_TODO = 'ADD_TODO'
   const REMOVE_TODO = 'REMOVE_TODO'
@@ -125,15 +96,10 @@
     }
   }
 
-  // root reducer
-  function app(state = {}, action) {
-    return {
-      todos: todos(state.todos, action),
-      goals: goals(state.goals, action)
-    }
-  }
-
-  const store = createStore(app)
+  const store = Redux.createStore(Redux.combineReducers({
+    todos,
+    goals
+  }))
 
 
   store.subscribe(() => {
@@ -197,7 +163,6 @@
     })
 
 
-
     document.getElementById('todos').appendChild(node)
   }
 
@@ -212,7 +177,6 @@
     node.appendChild(removeBtn)
     document.getElementById('goals').appendChild(node)
   }
-
 
 </script>
 </body>
